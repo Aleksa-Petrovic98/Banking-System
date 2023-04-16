@@ -63,7 +63,7 @@ class Account:
         self._time_zone_offset = time_zone_offset
 
     def generate_confirmation(self,transaction_type):
-
+        pass
 
     @property
     def balance(self):
