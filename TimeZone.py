@@ -28,19 +28,17 @@ class TimeZone:
 
     @property
     def offset(self):
-        return self.offset
+        return self._offset
 
     @property
     def name(self):
         return self._name
 
     def __eq__(self,other):
-        return isinstance(other, TimeZone) and self.name == other.name and self._offset_hours == other._offset_hours and self._offset_minutes == other._offset_minutes
+        return (isinstance(other, TimeZone) and self.name == other.name and self._offset_hours == other._offset_hours and self._offset_minutes == other._offset_minutes)
 
 
     def __repr__(self):
-        return f"TimeZone(name={self.name}, offset_hours = {self._offset_hours}. offset_minutes = {self._offset_minutes}"
+        return f"TimeZone(name={self.name}, offset_hours = {self._offset_hours}. offset_minutes = {self._offset_minutes})"
 
 
-tz1 = TimeZone("ABC", -2, -15)
-tz1.name
