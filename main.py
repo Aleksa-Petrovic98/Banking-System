@@ -100,15 +100,37 @@ class Account:
         return self.generate_confirmation_code('dummy')
 
     def deposit(self, amount):
+        if not isinstance(amount,numbers.Real):
+            raise ValueError("Deposit value must be a real number.")
+        if amount <= 0:
+            raise ValueError("Deposit cannot be negative")
+
+        transaction_code = self._transaction_types['deposit']
+
+        conf_code = self.generate_confirmation_code(transaction_code)
+
         self._balance += amount
-        return self._balance
+
+        return conf_code
 
     def withdraw(self, amount):
-        if self._balance - amount >= 0:
-            self._balance -= amount
-            return self._balance
+        accepted = False
+        if self.balance - amount < 0:
+            # insufficient funds - we'll reject this transaction
+            transaction_code = Account._transaction_types['rejected']
         else:
-            return ValueError("Insufficient Funds")
+            transaction_code = Account._transaction_types['withdraw']
+            accepted = True
+
+        conf_code = self.generate_confirmation_code(transaction_code)
+
+        # Doing this here in case there's a problem generating a confirmation code
+        # - do not want to modify the balance if we cannot generate a transaction code successfully
+        if accepted:
+            self._balance -= amount
+
+        return conf_code
+
 
     def add_interest(self):
         self._balance = self._balance + self._balance * Account._monthly_interest_rate
